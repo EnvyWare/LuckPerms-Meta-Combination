@@ -35,10 +35,13 @@ minecraft {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+
+    shadow group: 'com.github.Pixelmon-Development', name: 'API', version: '0.0.6'
 
     compileOnly 'net.luckperms:api:5.3'
 }
@@ -55,14 +58,10 @@ shadowJar {
     configurations = [project.configurations.shadow]
     archiveName = rootProject.name + '.jar'
 
-    relocate('org.atteo.evo.classindex', 'com.mc.blaze.shade.classindex')
-    relocate('org.atteo.classindex', 'com.mc.blaze.shade.classindex')
-    relocate('org.spongepowered.configurate', "com.mc.blaze.shade.configurate")
-    relocate('org.yaml.snakeyaml', "com.mc.blaze.shade.yaml.snakeyaml")
-    relocate('org.checkerframework', "com.mc.blaze.shade.checkerframework")
-    relocate('io.leangen.geantyref', 'com.mc.blaze.shade.geantyref')
-    relocate('org.apache.commons', 'com.mc.blaze.shade.apache.commons')
-    relocate('redis.clients', 'com.mc.blaze.shade.apache.redis.clients')
+    relocate('com.envyful.api', 'com.envyful.lp.meta.combine.shade.api')
+    relocate('org.spongepowered.configurate', 'com.envyful.lp.meta.combine.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.lp.meta.combine.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.lp.meta.combine.shade.geantyref')
 }
 
 jar.finalizedBy('shadowJar', 'reobfJar')
