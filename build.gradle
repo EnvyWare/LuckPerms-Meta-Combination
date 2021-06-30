@@ -1,0 +1,68 @@
+buildscript {
+    repositories {
+        maven {
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+        maven {
+            name = 'sponge'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.+', changing: true
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'com.envyful.lp.meta.combine'
+version = '1.0'
+archivesBaseName = 'lpcombinemeta'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+minecraft {
+    mappings channel: 'snapshot', version: '20180814-1.12'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
+
+    compileOnly 'net.luckperms:api:5.3'
+}
+
+configurations {
+    provided
+    compile.extendsFrom provided
+    compileJava.options.encoding = "UTF-8"
+    jar.archiveName = rootProject.name + '.jar'
+    compileJava.options.fork = true
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    archiveName = rootProject.name + '.jar'
+
+    relocate('org.atteo.evo.classindex', 'com.mc.blaze.shade.classindex')
+    relocate('org.atteo.classindex', 'com.mc.blaze.shade.classindex')
+    relocate('org.spongepowered.configurate', "com.mc.blaze.shade.configurate")
+    relocate('org.yaml.snakeyaml', "com.mc.blaze.shade.yaml.snakeyaml")
+    relocate('org.checkerframework', "com.mc.blaze.shade.checkerframework")
+    relocate('io.leangen.geantyref', 'com.mc.blaze.shade.geantyref')
+    relocate('org.apache.commons', 'com.mc.blaze.shade.apache.commons')
+    relocate('redis.clients', 'com.mc.blaze.shade.apache.redis.clients')
+}
+
+jar.finalizedBy('shadowJar', 'reobfJar')
