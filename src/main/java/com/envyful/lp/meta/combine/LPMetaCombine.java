@@ -8,7 +8,6 @@ import com.envyful.lp.meta.combine.listener.PlayerJoinListener;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.io.IOException;
 @Mod(
         modid = "lpmetacombine",
         name = "LPMetaCombine",
-        version = "0.0.1",
+        version = "0.0.3",
         acceptableRemoteVersions = "*"
 )
 public class LPMetaCombine {

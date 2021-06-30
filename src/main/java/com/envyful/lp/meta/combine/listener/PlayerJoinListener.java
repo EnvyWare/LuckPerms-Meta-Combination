@@ -1,19 +1,12 @@
 package com.envyful.lp.meta.combine.listener;
 
-import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.forge.listener.LazyListener;
 import com.envyful.lp.meta.combine.LPMetaCombine;
 import com.envyful.lp.meta.combine.LuckPermsMetaFactory;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.NodeType;
-import net.luckperms.api.node.types.MetaNode;
-import net.luckperms.api.query.QueryOptions;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-
-import java.util.UUID;
 
 /**
  *
