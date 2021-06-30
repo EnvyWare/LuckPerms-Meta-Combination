@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.IOException;
 
@@ -26,14 +27,11 @@ public class LPMetaCombine {
 
     @Mod.EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
-        System.out.println("Loading config");
         this.loadConfig();
-        System.out.println("?");
     }
 
     @Mod.EventHandler
-    public void onServerStart(FMLServerStartedEvent event) {
-        System.out.println("Loading listener");
+    public void onServerStart(FMLServerStartingEvent event) {
         new PlayerJoinListener(this);
         this.factory = new ForgeCommandFactory(FMLCommonHandler.instance().getMinecraftServerInstance());
         this.factory.registerCommand(FMLCommonHandler.instance().getMinecraftServerInstance(), new LPMetaReloadCommand(this));
