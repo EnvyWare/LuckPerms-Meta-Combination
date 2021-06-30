@@ -2,8 +2,10 @@ package com.envyful.lp.meta.combine.config;
 
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
+import com.envyful.api.config.yaml.data.YamlConfigStyle;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.yaml.NodeStyle;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
  *
  */
 @ConfigPath("config/lpmetacombine/config.yml")
+@YamlConfigStyle(NodeStyle.BLOCK)
 @ConfigSerializable
 public class MetaCombineConfig extends AbstractYamlConfig {
 
