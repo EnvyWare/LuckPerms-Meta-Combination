@@ -19,7 +19,13 @@ public class LuckPermsMetaFactory {
                 user.data().clear(NodeType.META.predicate(metaNode -> metaNode.getMetaKey().equals(meta)));
                 int total = user.resolveInheritedNodes(NodeType.META, QueryOptions.nonContextual()).stream()
                         .filter(node -> meta.equals(node.getMetaKey()))
-                        .mapToInt(metaNode -> Integer.parseInt(metaNode.getMetaValue())).sum();
+                        .mapToInt(metaNode -> {
+                            try {
+                                return Integer.parseInt(metaNode.getMetaValue());
+                            } catch (NumberFormatException e) {
+                                return 0;
+                            }
+                        }).sum();
                 MetaNode node = MetaNode.builder(meta, Integer.toString(total)).build();
 
                 user.data().clear(NodeType.META.predicate(metaNode -> metaNode.getMetaKey().equals(meta)));

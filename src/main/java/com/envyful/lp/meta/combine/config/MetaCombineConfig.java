@@ -5,6 +5,7 @@ import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.config.yaml.data.YamlConfigStyle;
 import com.google.common.collect.Lists;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.yaml.NodeStyle;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @ConfigSerializable
 public class MetaCombineConfig extends AbstractYamlConfig {
 
+    @Comment("The list of LuckPerm metas that will be added together when the player logs into the server")
     private List<String> metas = Lists.newArrayList();
 
     public MetaCombineConfig() {
