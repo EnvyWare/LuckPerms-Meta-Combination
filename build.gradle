@@ -41,10 +41,12 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
-    shadow group: 'com.github.Pixelmon-Development', name: 'API', version: '0.0.7'
+    shadow group: 'com.github.Pixelmon-Development.API', name: 'forge', version: '0.0.7'
+    shadow group: 'com.github.Pixelmon-Development.API', name: 'commons', version: '0.0.7'
 
     compileOnly 'net.luckperms:api:5.3'
 }
+
 
 configurations {
     provided
