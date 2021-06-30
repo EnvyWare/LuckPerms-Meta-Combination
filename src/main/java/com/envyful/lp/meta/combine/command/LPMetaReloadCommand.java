@@ -1,7 +1,10 @@
-package com.envyful.lp.meta.combine.listener;
+package com.envyful.lp.meta.combine.command;
 
+import com.envyful.api.command.annotate.Command;
+import com.envyful.api.command.annotate.Permissible;
+import com.envyful.api.command.annotate.executor.CommandProcessor;
+import com.envyful.api.command.annotate.executor.Sender;
 import com.envyful.api.concurrency.UtilConcurrency;
-import com.envyful.api.forge.listener.LazyListener;
 import com.envyful.lp.meta.combine.LPMetaCombine;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -9,29 +12,35 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.NodeType;
 import net.luckperms.api.node.types.MetaNode;
 import net.luckperms.api.query.QueryOptions;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.UUID;
 
-/**
- *
- * Listener class that updates the player's meta once they join using the list of metas in the config.
- *
- */
-public class PlayerJoinListener extends LazyListener {
+@Command("lpmreload")
+@Permissible("lpmeta.reload")
+public class LPMetaReloadCommand {
 
     private final LPMetaCombine mod;
     private final LuckPerms luckPerms;
 
-    public PlayerJoinListener(LPMetaCombine mod) {
+    public LPMetaReloadCommand(LPMetaCombine mod) {
         this.mod = mod;
         this.luckPerms = LuckPermsProvider.get();
     }
 
-    @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        this.handlePlayerMeta(event.player.getUniqueID());
+    @CommandProcessor
+    public void run(@Sender ICommandSender sender) {
+        this.mod.loadConfig();
+        sender.sendMessage(new TextComponentString("Reloaded LPMeta config. Now updating players..."));
+
+        for (EntityPlayerMP player : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
+            this.handlePlayerMeta(player.getUniqueID());
+        }
+
+        sender.sendMessage(new TextComponentString("Online player meta update finished."));
     }
 
     private void handlePlayerMeta(UUID uuid) {
@@ -39,8 +48,6 @@ public class PlayerJoinListener extends LazyListener {
             User user = this.luckPerms.getUserManager().getUser(uuid);
 
             for (String meta : this.mod.getConfig().getMetas()) {
-                user.data().clear(NodeType.META.predicate(metaNode -> metaNode.getMetaKey().equals(meta)));
-
                 int total = user.resolveInheritedNodes(NodeType.META, QueryOptions.nonContextual()).stream()
                         .filter(node -> meta.equals(node.getMetaKey()))
                         .mapToInt(metaNode -> Integer.parseInt(metaNode.getMetaValue())).sum();
