@@ -3,6 +3,7 @@ package com.envyful.lp.meta.combine.listener;
 import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.forge.listener.LazyListener;
 import com.envyful.lp.meta.combine.LPMetaCombine;
+import com.envyful.lp.meta.combine.LuckPermsMetaFactory;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
@@ -31,25 +32,6 @@ public class PlayerJoinListener extends LazyListener {
 
     @SubscribeEvent
     public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        this.handlePlayerMeta(event.player.getUniqueID());
-    }
-
-    private void handlePlayerMeta(UUID uuid) {
-        UtilConcurrency.runAsync(() -> {
-            User user = this.luckPerms.getUserManager().getUser(uuid);
-
-            for (String meta : this.mod.getConfig().getMetas()) {
-                user.data().clear(NodeType.META.predicate(metaNode -> metaNode.getMetaKey().equals(meta)));
-
-                int total = user.resolveInheritedNodes(NodeType.META, QueryOptions.nonContextual()).stream()
-                        .filter(node -> meta.equals(node.getMetaKey()))
-                        .mapToInt(metaNode -> Integer.parseInt(metaNode.getMetaValue())).sum();
-                MetaNode node = MetaNode.builder(meta, Integer.toString(total)).build();
-
-                user.data().clear(NodeType.META.predicate(metaNode -> metaNode.getMetaKey().equals(meta)));
-                user.data().add(node);
-                this.luckPerms.getUserManager().saveUser(user);
-            }
-        });
+        LuckPermsMetaFactory.handlePlayerMeta(event.player.getUniqueID(), this.mod.getConfig(), this.luckPerms);
     }
 }
